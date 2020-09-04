@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
@@ -8,6 +8,7 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import { makeStyles } from '@material-ui/core/styles';
+import { SearchContext } from './SearchContext'
 
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -40,6 +41,7 @@ const useStyles = makeStyles((theme) => ({
 
 const MovieDisplay = () => {
   const classes = useStyles();
+  console.log(useContext(SearchContext))
   return (
     <Container className={classes.cardGrid} maxWidth="xl">
 
