@@ -5,6 +5,7 @@
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
+    "axios": "^0.20.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.1",
@@ -20,6 +21,7 @@
     "extends": "react-app"
   },
   "proxy": "http://localhost:3001",
+  "secure": false,
   "browserslist": {
     "production": [
       ">0.2%",

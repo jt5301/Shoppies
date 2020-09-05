@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
-
+import { SearchContext } from './SearchContext'
+import { MovieCard } from './MovieCard.js'
 const useStyles = makeStyles((theme) => ({
   heroContent: {
     backgroundColor: theme.palette.background.paper,
@@ -11,6 +12,8 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const Nominees = () => {
+  let movieParam = useContext(SearchContext)
+
   const classes = useStyles();
   return (
     <div className={classes.heroContent}>

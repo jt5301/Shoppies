@@ -9,7 +9,6 @@ const NavbarSearch = () => {
   const [search, setSearch] = useState('')
   const submitSearch = (event) => {
     event.preventDefault()
-    console.log(search)
     searchTerm.setSearchTerm(search)
   }
   return (
@@ -17,7 +16,6 @@ const NavbarSearch = () => {
       <Toolbar>
         <Typography variant="h6" color="inherit" noWrap>
           <form onSubmit={(event) => { submitSearch(event) }}><input onChange={(event) => setSearch(event.target.value)}></input></form>
-
         </Typography>
       </Toolbar>
     </AppBar>
