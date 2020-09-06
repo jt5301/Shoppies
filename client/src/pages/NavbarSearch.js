@@ -17,6 +17,9 @@ const NavbarSearch = () => {
         <Typography variant="h6" color="inherit" noWrap>
           <form onSubmit={(event) => { submitSearch(event) }}><input onChange={(event) => setSearch(event.target.value)}></input></form>
         </Typography>
+        <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
+          The Shoppies
+      </Typography>
       </Toolbar>
     </AppBar>
   )

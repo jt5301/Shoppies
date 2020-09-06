@@ -39,7 +39,7 @@ const MovieDisplay = () => {
     <Container className={classes.cardGrid} maxWidth="xl">
       <Grid container spacing={5}>
         {movies.map((current) => {
-          return (<MovieCard key={current.imdbID} movie={current} buttonMsg={'add'} />)
+          return (<MovieCard key={current.imdbID} movie={current} buttonMsg={'Add Movie'} />)
         })}
       </Grid>
     </Container>

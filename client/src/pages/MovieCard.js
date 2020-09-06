@@ -49,10 +49,15 @@ export const MovieCard = (props) => {
   const movie = props.movie
   const [nominated, setNominated] = useState(false)
   let searchParam = useContext(SearchContext)
-  const addToNominee = () => {
-    searchParam.setNominee({ ...searchParam.nominees, [movie.imdbID]: movie })
+  const addRemoveNominee = () => {
+    if (props.buttonMsg === 'Add Movie') searchParam.setNominee({ ...searchParam.nominees, [movie.imdbID]: movie })
+    if (props.buttonMsg === 'Remove') {
+      searchParam.setNominee({ ...searchParam.nominees, [movie.imdbID]: undefined })
+    }
+    console.log(searchParam.nominees)
   }
   useEffect(() => {
+    console.log(searchParam.nominees)
     if (searchParam.nominees[movie.imdbID]) {
       setNominated(true)
     }
@@ -74,19 +79,28 @@ export const MovieCard = (props) => {
             {movie.Year}
           </Typography>
         </CardContent>
-        {nominated ?
-          <div className={classes.added}>
-            Added!
-        </div>
-          : <CardActions
-            onClick={(event) => addToNominee(event)}
+        {props.inNominee ?
+          <CardActions
+            onClick={(event) => addRemoveNominee(event)}
             classes={{
               root: classes.root
             }}>
             <Button size="small" color="primary">
-              Add Movie
+              {props.buttonMsg}
             </Button>
-          </CardActions>}
+          </CardActions> : nominated ?
+            <div className={classes.added}>
+              Added!
+         </div>
+            : <CardActions
+              onClick={(event) => addRemoveNominee(event)}
+              classes={{
+                root: classes.root
+              }}>
+              <Button size="small" color="primary">
+                {props.buttonMsg}
+              </Button>
+            </CardActions>}
       </Card>
     </Grid >
   )

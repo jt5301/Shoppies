@@ -9,21 +9,43 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(8, 0, 6),
   },
+  root: {
+    display: 'flex'
+  }
 }))
 
 const Nominees = () => {
   let movieParam = useContext(SearchContext)
-
   const classes = useStyles();
+  const [instructions, setInstructions] = useState(true)
+  useEffect(() => {
+    let noNominees = true
+    Object.keys(movieParam.nominees).forEach((current) => {
+      if (movieParam.nominees[current]) noNominees = false
+    })
+    if (noNominees) setInstructions(true)
+    else setInstructions(false)
+  }, [movieParam.nominees])
+  console.log()
   return (
     <div className={classes.heroContent}>
-      <Container maxWidth="sm">
-        <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
-          The Shoppies
-      </Typography>
-        <Typography variant="h5" align="center" color="textSecondary" paragraph>
-          Your nominee list is empty! Use the search bar above to find and add a film you think should be up for nomination. They'll be displayed here.
-      </Typography>
+      <Container classes={{
+        root: classes.root
+      }} maxWidth="sm">
+        {instructions ?
+          <Typography variant="h5" align="center" color="textSecondary" paragraph>
+            Your nominee list is empty! Use the search bar above to find and add a film you think should be up for nomination. They'll be displayed here.
+        </Typography>
+          :
+          Object.keys(movieParam.nominees).map(
+            (current) => {
+              if (movieParam.nominees[current]) {
+                console.log(current)
+                return (<MovieCard key={current.imdbID} movie={movieParam.nominees[current]}
+                  inNominee={true}
+                  buttonMsg={'Remove'} />)
+              }
+            })}
       </Container>
     </div>
   )
