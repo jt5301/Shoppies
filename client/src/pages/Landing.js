@@ -6,6 +6,8 @@ import { SearchProvider } from './SearchContext.js'
 
 
 export default function Landing() {
+
+
   return (
     <React.Fragment>
       <SearchProvider>

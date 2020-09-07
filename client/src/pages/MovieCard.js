@@ -10,15 +10,9 @@ import Typography from '@material-ui/core/Typography';
 import { SearchContext } from './SearchContext'
 
 const useStyles = makeStyles((theme) => ({
-  icon: {
-    marginRight: theme.spacing(2),
-  },
   root: {
     display: 'flex',
     justifyContent: 'center'
-  },
-  heroButtons: {
-    marginTop: theme.spacing(4),
   },
   cardGrid: {
     paddingTop: theme.spacing(8),
@@ -30,9 +24,11 @@ const useStyles = makeStyles((theme) => ({
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
+    marginRight: '10px',
+    marginLeft: '10px'
   },
   cardMedia: {
-    paddingTop: '100%', // 16:9
+    paddingTop: '100%',
   },
   cardContent: {
     flexGrow: 1,
@@ -41,6 +37,14 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'center',
     paddingBottom: '10px',
+  },
+  imdbLink: {
+    textDecoration: 'none',
+    color: '#DF1B1B'
+  },
+  buttonContainer: {
+    display: 'flex',
+    justifyContent: 'center'
   }
 }))
 
@@ -50,18 +54,19 @@ export const MovieCard = (props) => {
   const [nominated, setNominated] = useState(false)
   let searchParam = useContext(SearchContext)
   const addRemoveNominee = () => {
-    if (props.buttonMsg === 'Add Movie') searchParam.setNominee({ ...searchParam.nominees, [movie.imdbID]: movie })
+    if (props.buttonMsg === 'Add Movie') {
+      searchParam.setNominee({ ...searchParam.nominees, [movie.imdbID]: movie })
+    }
     if (props.buttonMsg === 'Remove') {
       searchParam.setNominee({ ...searchParam.nominees, [movie.imdbID]: undefined })
     }
-    console.log(searchParam.nominees)
   }
   useEffect(() => {
-    console.log(searchParam.nominees)
     if (searchParam.nominees[movie.imdbID]) {
       setNominated(true)
     }
     else setNominated(false)
+    localStorage.setItem('storedNominees', JSON.stringify(searchParam.nominees))
   }, [searchParam.nominees])
   return (
     <Grid item key={movie.imdbID} xs={3}>
@@ -72,7 +77,7 @@ export const MovieCard = (props) => {
           title={movie.Title}
         />
         <CardContent className={classes.cardContent}>
-          <Typography gutterBottom variant="h5" component="h2">
+          <Typography>
             {movie.Title}
           </Typography>
           <Typography>
@@ -92,15 +97,22 @@ export const MovieCard = (props) => {
             <div className={classes.added}>
               Added!
          </div>
-            : <CardActions
-              onClick={(event) => addRemoveNominee(event)}
-              classes={{
-                root: classes.root
-              }}>
+            :
+            <div className={classes.buttonContainer}>
+              <CardActions
+                onClick={(event) => addRemoveNominee(event)}
+                classes={{
+                  root: classes.root
+                }}>
+                <Button size="small" color="primary">
+                  {props.buttonMsg}
+                </Button>
+              </CardActions>
               <Button size="small" color="primary">
-                {props.buttonMsg}
+                <a className={classes.imdbLink} href={`https://www.imdb.com/title/${movie.imdbID}/`}> IMDB Page</a>
               </Button>
-            </CardActions>}
+            </div>
+        }
       </Card>
     </Grid >
   )

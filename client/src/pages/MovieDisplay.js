@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { SearchContext } from './SearchContext'
 import axios from 'axios'
 import { MovieCard } from './MovieCard.js'
+import Snackbar from '@material-ui/core/Snackbar';
 
 const useStyles = makeStyles((theme) => ({
   cardGrid: {
@@ -19,6 +20,28 @@ const MovieDisplay = () => {
   const classes = useStyles();
   let searchParam = useContext(SearchContext)
   const [movies, setMovies] = useState([])
+  const [nomineeComplete, setNomineeComplete] = useState(false)
+
+  useEffect(() => {
+
+  }, [searchParam.nominees])
+
+  const closeSnackbar = () => {
+    setNomineeComplete(false)
+  }
+
+  useEffect(() => {
+    const defaultMovies = async () => {
+      try {
+        const res = await axios.get(`/movies/search/avengers`)
+        setMovies([...res.data.Search])
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    defaultMovies()
+  }, [])
+
   useEffect(() => {
     let formattedQuery = ''
     for (let i = 0; i < searchParam.searchTerm.length; i++) {
@@ -34,7 +57,7 @@ const MovieDisplay = () => {
       }
     }
     getMovies()
-  }, [searchParam])
+  }, [searchParam.searchTerm])
   return (
     <Container className={classes.cardGrid} maxWidth="xl">
       <Grid container spacing={5}>
@@ -42,6 +65,12 @@ const MovieDisplay = () => {
           return (<MovieCard key={current.imdbID} movie={current} buttonMsg={'Add Movie'} />)
         })}
       </Grid>
+      <Snackbar
+        open={nomineeComplete}
+        autoHideDuration={6000}
+        onClose={closeSnackbar}
+        message="Nomination Complete. Feel free to change your choices"
+      ></Snackbar>
     </Container>
   )
 }

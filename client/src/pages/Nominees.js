@@ -11,13 +11,27 @@ const useStyles = makeStyles((theme) => ({
   },
   root: {
     display: 'flex'
-  }
+  },
+  cardGrid: {
+    paddingTop: theme.spacing(8),
+    paddingBottom: theme.spacing(2),
+    display: 'flex',
+    justifyContent: 'space-evenly',
+  },
 }))
 
 const Nominees = () => {
   let movieParam = useContext(SearchContext)
   const classes = useStyles();
   const [instructions, setInstructions] = useState(true)
+  useEffect(() => {
+    const movies = JSON.parse(localStorage.getItem('storedNominees')) || ""
+    movieParam.setNominee(movies)
+    console.log(typeof movies, movies)
+    const stringMovies = JSON.stringify(movies)
+    console.log(stringMovies)
+    localStorage.setItem('storedNominees', stringMovies)
+  }, [])
   useEffect(() => {
     let noNominees = true
     Object.keys(movieParam.nominees).forEach((current) => {
@@ -26,28 +40,29 @@ const Nominees = () => {
     if (noNominees) setInstructions(true)
     else setInstructions(false)
   }, [movieParam.nominees])
-  console.log()
   return (
-    <div className={classes.heroContent}>
-      <Container classes={{
-        root: classes.root
-      }} maxWidth="sm">
+    <heroContent>
+      <Container
+        className={classes.cardGrid} maxwidth='xl'
+        classes={{
+          root: classes.root
+        }} maxWidth="sm">
         {instructions ?
           <Typography variant="h5" align="center" color="textSecondary" paragraph>
-            Your nominee list is empty! Use the search bar above to find and add a film you think should be up for nomination. They'll be displayed here.
-        </Typography>
+            Your nominee list is empty! Use the search bar above to find and add up to five films that you think should be up for nomination. They'll be displayed here.
+          </Typography>
           :
           Object.keys(movieParam.nominees).map(
             (current) => {
               if (movieParam.nominees[current]) {
-                console.log(current)
-                return (<MovieCard key={current.imdbID} movie={movieParam.nominees[current]}
+                return (<MovieCard key={current} movie={movieParam.nominees[current]}
                   inNominee={true}
                   buttonMsg={'Remove'} />)
               }
             })}
       </Container>
-    </div>
+
+    </heroContent>
   )
 }
 

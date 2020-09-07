@@ -3,8 +3,14 @@ import Typography from '@material-ui/core/Typography';
 import Toolbar from '@material-ui/core/Toolbar';
 import AppBar from '@material-ui/core/AppBar';
 import { SearchContext } from './SearchContext'
+import { makeStyles } from '@material-ui/core/styles'
+
+const useStyles = makeStyles((theme) => ({
+
+}))
 
 const NavbarSearch = () => {
+  const classes = useStyles()
   let searchTerm = useContext(SearchContext)
   const [search, setSearch] = useState('')
   const submitSearch = (event) => {
