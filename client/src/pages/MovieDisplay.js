@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
   cardGrid: {
     paddingTop: theme.spacing(8),
     paddingBottom: theme.spacing(8),
-    height: '600px',
+    height: '750px',
     overflow: 'scroll'
   },
 }))
@@ -23,7 +23,17 @@ const MovieDisplay = () => {
   const [nomineeComplete, setNomineeComplete] = useState(false)
 
   useEffect(() => {
-
+    let limitFive = 0
+    let nomineeKeys = Object.keys(searchParam.nominees)
+    for (let key of nomineeKeys) {
+      if (searchParam.nominees[key]) limitFive += 1
+      if (limitFive === 5) {
+        searchParam.setLimit(true)
+        setNomineeComplete(true)
+        break
+      }
+      else searchParam.setLimit(false)
+    }
   }, [searchParam.nominees])
 
   const closeSnackbar = () => {
@@ -67,9 +77,9 @@ const MovieDisplay = () => {
       </Grid>
       <Snackbar
         open={nomineeComplete}
-        autoHideDuration={6000}
+        autoHideDuration={4000}
         onClose={closeSnackbar}
-        message="Nomination Complete. Feel free to change your choices"
+        message="Nomination Complete! Feel free to change your choices by removing a nominee to add a different one."
       ></Snackbar>
     </Container>
   )

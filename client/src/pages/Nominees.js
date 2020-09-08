@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex'
   },
   cardGrid: {
-    paddingTop: theme.spacing(8),
+    paddingTop: theme.spacing(6),
     paddingBottom: theme.spacing(2),
     display: 'flex',
     justifyContent: 'space-evenly',
@@ -59,6 +59,7 @@ const Nominees = () => {
                   inNominee={true}
                   buttonMsg={'Remove'} />)
               }
+              else return ''
             })}
       </Container>
 

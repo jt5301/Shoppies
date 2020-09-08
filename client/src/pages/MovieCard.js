@@ -8,6 +8,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import { SearchContext } from './SearchContext'
+import Snackbar from '@material-ui/core/Snackbar'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
   },
   imdbLink: {
     textDecoration: 'none',
-    color: '#DF1B1B'
+    color: theme.palette.primary.main
   },
   buttonContainer: {
     display: 'flex',
@@ -53,19 +54,29 @@ export const MovieCard = (props) => {
   const movie = props.movie
   const [nominated, setNominated] = useState(false)
   let searchParam = useContext(SearchContext)
+  const [limitWarning, setLimitWarning] = useState(false)
+  const closeSnackbar = () => {
+    setLimitWarning(false)
+  }
   const addRemoveNominee = () => {
-    if (props.buttonMsg === 'Add Movie') {
-      searchParam.setNominee({ ...searchParam.nominees, [movie.imdbID]: movie })
-    }
     if (props.buttonMsg === 'Remove') {
       searchParam.setNominee({ ...searchParam.nominees, [movie.imdbID]: undefined })
+    }
+    if (searchParam.atLimit) {
+      setLimitWarning(true)
+      return
+    }
+    if (props.buttonMsg === 'Add Movie') {
+      searchParam.setNominee({ ...searchParam.nominees, [movie.imdbID]: movie })
     }
   }
   useEffect(() => {
     if (searchParam.nominees[movie.imdbID]) {
       setNominated(true)
     }
-    else setNominated(false)
+    else {
+      setNominated(false)
+    }
     localStorage.setItem('storedNominees', JSON.stringify(searchParam.nominees))
   }, [searchParam.nominees])
   return (
@@ -85,6 +96,7 @@ export const MovieCard = (props) => {
           </Typography>
         </CardContent>
         {props.inNominee ?
+          //first ternary to check if card is being used for nominee or for moviedisplay
           <CardActions
             onClick={(event) => addRemoveNominee(event)}
             classes={{
@@ -94,6 +106,7 @@ export const MovieCard = (props) => {
               {props.buttonMsg}
             </Button>
           </CardActions> : nominated ?
+            //second ternary to check if movie is in nomination, or should have buttons available to add / check imdb
             <div className={classes.added}>
               Added!
          </div>
@@ -114,6 +127,12 @@ export const MovieCard = (props) => {
             </div>
         }
       </Card>
+      <Snackbar
+        open={limitWarning}
+        autoHideDuration={4000}
+        onClose={closeSnackbar}
+        message="You can only nominate five. Remove a nominated movie first before adding another"
+      ></Snackbar>
     </Grid >
   )
 }
